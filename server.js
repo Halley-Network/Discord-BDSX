@@ -205,9 +205,6 @@ process.on('message', (message) => {
             .setColor(res.statusCode === 0 ? 0x00ff00 : 0xff0000)
             .setDescription(res.statusMessage === null || res.statusMessage === undefined || !typeof res.statusMessage === "string" ? "(null)" : res.statusMessage.length > 4000 ? `${res.statusMessage.substr(0, 4000)}...` : res.statusMessage)
         client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
-
-        if(config.SendtoManyChannels === false) return;
-        SMCs(embed)
     } else if (message[0] === "list") {
         //メンバーリスト受信
         const nowlist = message[1];
@@ -221,9 +218,6 @@ process.on('message', (message) => {
             .setDescription(c.length == 0 ? lang.no_player : c.length > 4000 ? `${c.substr(0, 4000)}...` : c)
             .setFooter({ text: message[2] })
         client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
-
-        if(config.SendtoManyChannels === false) return;
-    SMCs(embed)
     } else if (message[0] === "reload") {
         //reloadコマンド
         reload();
