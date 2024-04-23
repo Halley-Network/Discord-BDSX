@@ -23,6 +23,12 @@ function reload() {
     }
     lang = JSON.parse(fs.readFileSync(`${filepath}/lang.json`))[country];
 }
+//SendtoManyChannels function
+function SMCs(embed) {
+    for(let i=0; i<config.SendtoManyChannels_ID.length; i++) {
+        client.channels.cache.get(config.SendtoManyChannels_ID[i]).send({ embeds: [embed] });
+    }
+}
 
 //Discord Botログイン
 const { Client, GatewayIntentBits, EmbedBuilder, underscore } = require('discord.js');
@@ -36,6 +42,9 @@ client.on('ready', () => {
         .setColor(0x00ff00)
         .setDescription(lang.open)
     client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
+
+    if(config.SendtoManyChannels === false) return;
+    SMCs(embed)
 });
 client.on('messageCreate', message => {
     if (message.author.bot) return;//Bot無視
@@ -185,6 +194,9 @@ process.on('message', (message) => {
             .setColor(message[1].embed.color)
             .setDescription(message[1].embed.description)
         client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
+        
+        if(config.SendtoManyChannels === false) return;
+        SMCs(embed)
     } else if (message[0] === "res") {
         //コマンド結果受信
         let res = message[1];
@@ -193,6 +205,9 @@ process.on('message', (message) => {
             .setColor(res.statusCode === 0 ? 0x00ff00 : 0xff0000)
             .setDescription(res.statusMessage === null || res.statusMessage === undefined || !typeof res.statusMessage === "string" ? "(null)" : res.statusMessage.length > 4000 ? `${res.statusMessage.substr(0, 4000)}...` : res.statusMessage)
         client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
+
+        if(config.SendtoManyChannels === false) return;
+        SMCs(embed)
     } else if (message[0] === "list") {
         //メンバーリスト受信
         const nowlist = message[1];
@@ -206,6 +221,9 @@ process.on('message', (message) => {
             .setDescription(c.length == 0 ? lang.no_player : c.length > 4000 ? `${c.substr(0, 4000)}...` : c)
             .setFooter({ text: message[2] })
         client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
+
+        if(config.SendtoManyChannels === false) return;
+    SMCs(embed)
     } else if (message[0] === "reload") {
         //reloadコマンド
         reload();

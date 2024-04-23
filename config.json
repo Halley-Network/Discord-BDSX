@@ -1,15 +1,18 @@
 {
-    "token":"your token",
-    "send_channelID":"send channel id",
+    "token":"",
+    "send_channelID":"",
     "discord_command":{
         "bool":true,
         "prefix":"."
     },
     "OP_command":{
         "bool":true,
-        "roleId":"OP role id"
+        "roleId":""
     },
     "lang":"ja",
     "allowBackupLog":false,
-    "deathLog":true
+    "deathLog":true,
+
+    "SendtoManyChannels": true,
+    "SendtoManyChannels_ID": []
 }
