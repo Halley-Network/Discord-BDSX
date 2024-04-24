@@ -36,11 +36,15 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages]
 });
 client.on('ready', () => {
+    let MCVersion = JSON.parse(fs.readFileSync(`../bedrock_server/installinfo.json`));
     process.send(["log", 'Discord bot Login!']);
     const embed = new EmbedBuilder()
         .setAuthor({ "name": "Server" })
         .setColor(0x00ff00)
         .setDescription(lang.open)
+        .addFields(
+            {name: `Minecraft Version`, value: `${MCVersion.bdsVersion}`}
+        )
     client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
 
     if(config.SendtoManyChannels === false) return;

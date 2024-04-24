@@ -1,13 +1,13 @@
 {
-    "token":"",
-    "send_channelID":"",
+    "token":"TOKEN",
+    "send_channelID":"SendCH",
     "discord_command":{
         "bool":true,
         "prefix":"."
     },
     "OP_command":{
         "bool":true,
-        "roleId":""
+        "roleId":"RoleId"
     },
     "lang":"ja",
     "allowBackupLog":false,
