@@ -42,16 +42,21 @@ launcher_1.bedrockServer.afterOpen().then(() => {
                     if (launcher_1.bedrockServer.isClosed()) return;
                     let res = launcher_1.bedrockServer.executeCommand(message[1], cr.CommandResultType.Data);
                     if (!(message[2] === "mute")) {
-                        myChild.send(["res", res.data])
+                        myChild.send(["res", res.data]);
                     }
                 } else if (message[0] === "list") {
                     //listを送る
                     if (launcher_1.bedrockServer.isClosed()) return;
                     let m = [];
-                    for (const player of server_1.serverInstance.getPlayers()) {
+                    for (const player of launcher_1.bedrockServer.serverInstance.getPlayers()) {
                         m.push(player.getNameTag());
                     }
-                    myChild.send(["list", m, `${server_1.serverInstance.getPlayers().length}/${server_1.serverInstance.getMaxPlayers()}`]);
+                    myChild.send(["list", m, `${launcher_1.bedrockServer.serverInstance.getActivePlayerCount()}/${launcher_1.bedrockServer.serverInstance.getMaxPlayers()}`]);
+                } else if(message[0] === "worldname") {
+                    const MCVersion = launcher_1.bedrockServer.serverInstance.getGameVersion();
+                    const worldName = launcher_1.bedrockServer.serverInstance.getMotd();
+                    console.log(launcher_1.bedrockServer.serverInstance.getPlayers())
+                    myChild.send(["worldname", `${MCVersion.major}.${MCVersion.minor}.${MCVersion.patch}`, worldName]);
                 } else if (message[0] === "log") {
                     //標準出力が異なる場合の画面表示
                     console.log(message[1]);

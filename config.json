@@ -13,6 +13,6 @@
     "allowBackupLog":false,
     "deathLog":true,
 
-    "SendtoManyChannels": true,
+    "SendtoManyChannels": false,
     "SendtoManyChannels_ID": []
 }

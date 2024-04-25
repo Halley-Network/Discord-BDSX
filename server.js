@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const filepath = path.resolve(__dirname, './');
 let config = JSON.parse(fs.readFileSync(`${filepath}/config.json`));
-let country;
+let country, WorldName;
 if (config.lang === undefined || !(config.lang in { "ja": null, "en": null })) {
     country = "ja";
 } else {
@@ -36,19 +36,8 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages]
 });
 client.on('ready', () => {
-    let MCVersion = JSON.parse(fs.readFileSync(`../bedrock_server/installinfo.json`));
+    process.send(["worldname"]);
     process.send(["log", 'Discord bot Login!']);
-    const embed = new EmbedBuilder()
-        .setAuthor({ "name": "Server" })
-        .setColor(0x00ff00)
-        .setDescription(lang.open)
-        .addFields(
-            {name: `Minecraft Version`, value: `${MCVersion.bdsVersion}`}
-        )
-    client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
-
-    if(config.SendtoManyChannels === false) return;
-    SMCs(embed)
 });
 client.on('messageCreate', message => {
     if (message.author.bot) return;//Bot無視
@@ -222,6 +211,21 @@ process.on('message', (message) => {
             .setDescription(c.length == 0 ? lang.no_player : c.length > 4000 ? `${c.substr(0, 4000)}...` : c)
             .setFooter({ text: message[2] })
         client.channels.cache.get(config.send_channelID).send({ embeds: [embed] });
+    } else if(message[0] === "worldname") {
+        // 起動ログの作成
+        const embed = new EmbedBuilder()
+            .setAuthor({ "name": "Server" })
+            .setColor(0x00ff00)
+            .setDescription(lang.open)
+            .addFields(
+                {name: `Minecraft Version`, value: `${message[1]}`},
+                {name: `Minecraft World Name`, value: `${message[2]}`}
+            )
+
+        client.channels.cache.get(config.send_channelID).send({ embeds: [embed]});
+
+        if(config.SendtoManyChannels === false) return;
+        SMCs(embed)
     } else if (message[0] === "reload") {
         //reloadコマンド
         reload();
